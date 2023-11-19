@@ -4,8 +4,9 @@ import Link from "next/link";
 import { api } from "~/utils/api";
 
 export default function Home() {
-  const hello = api.post.hello.useQuery({ text: "from tRPC" });
-
+  // const hello = api.post.hello.useQuery({ text: "from tRPC" });
+  const allBlogs = api.post.getAllBlogs.useQuery();
+  //console.log(allBlogs.data);
   return (
     <>
       <Head>
@@ -19,39 +20,19 @@ export default function Home() {
             <span className="text-[hsl(280,100%,70%)]">T3</span> App Blog
           </h1>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              <Link href={`#`} className="group">
+              {allBlogs.data?.map((blog) => (
+              <Link key={blog.id} href={`blog/${blog.id}`} className="group">
                 <div className="transform rounded-xl bg-white/10 p-6 transition-all duration-300 hover:bg-white/20">
                   <h3 className="mb-4 text-2xl font-bold group-hover:text-[hsl(280,100%,70%)]">
-                    ブログのタイトル
+                    {blog.title}
                   </h3>
-                  <div className="mb-4 text-lg">ブログの日付</div>
+                  <div className="mb-4 text-lg">{blog.description}</div>
                   <span className="text-base text-gray-400">
-                    2023/11/19
+                    {blog.createdAt.toLocaleDateString()}
                   </span>
                 </div>
               </Link>
-              <Link href={`#`} className="group">
-                <div className="transform rounded-xl bg-white/10 p-6 transition-all duration-300 hover:bg-white/20">
-                  <h3 className="mb-4 text-2xl font-bold group-hover:text-[hsl(280,100%,70%)]">
-                    ブログのタイトル
-                  </h3>
-                  <div className="mb-4 text-lg">ブログの日付</div>
-                  <span className="text-base text-gray-400">
-                    2023/11/19
-                  </span>
-                </div>
-              </Link>
-              <Link href={`#`} className="group">
-                <div className="transform rounded-xl bg-white/10 p-6 transition-all duration-300 hover:bg-white/20">
-                  <h3 className="mb-4 text-2xl font-bold group-hover:text-[hsl(280,100%,70%)]">
-                    ブログのタイトル
-                  </h3>
-                  <div className="mb-4 text-lg">ブログの日付</div>
-                  <span className="text-base text-gray-400">
-                    2023/11/19
-                  </span>
-                </div>
-              </Link>
+              ))}
           </div>
         </div>
       </main>
